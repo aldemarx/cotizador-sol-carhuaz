@@ -1,0 +1,68 @@
+{
+  "_comentario": "Casos de prueba de contrato compartidos entre el motor TS y el futuro motor Python (documento de traspaso, seccion 5.2/5.3). Ninguna version del motor sale si estos casos fallan.",
+  "parametros": {
+    "cargo_fijo": 4000,
+    "descuento_contado": 500,
+    "inicial": 1000,
+    "cuotas_min": 1,
+    "cuotas_max": 80
+  },
+  "casos": [
+    {
+      "codigo_lote": "245A-01",
+      "areaM2": 91.95,
+      "precioM2": 250,
+      "nCuotas": 75,
+      "esperado": {
+        "precioConDescuento": 22987.50,
+        "precioTotal": 26987.50,
+        "precioContado": 22487.50,
+        "saldo": 21987.50,
+        "cuotaMensual": 293.17,
+        "cuotaFinal": 292.92
+      }
+    },
+    {
+      "codigo_lote": "245A-02",
+      "areaM2": 95.01,
+      "precioM2": 225.67,
+      "nCuotas": 75,
+      "esperado": {
+        "precioConDescuento": 21440.91,
+        "precioTotal": 25440.91,
+        "precioContado": 20940.91,
+        "saldo": 20440.91,
+        "cuotaMensual": 272.55,
+        "cuotaFinal": 272.21
+      }
+    },
+    {
+      "codigo_lote": "265A-11",
+      "areaM2": 112.70,
+      "precioM2": 250,
+      "nCuotas": 75,
+      "esperado": {
+        "precioConDescuento": 28175.00,
+        "precioTotal": 32175.00,
+        "precioContado": 27675.00,
+        "saldo": 27175.00,
+        "cuotaMensual": 362.33,
+        "cuotaFinal": 362.58
+      }
+    },
+    {
+      "codigo_lote": "267-8A",
+      "areaM2": 176.00,
+      "precioM2": 345,
+      "nCuotas": 75,
+      "esperado": {
+        "precioConDescuento": 60720.00,
+        "precioTotal": 64720.00,
+        "precioContado": 60220.00,
+        "saldo": 59720.00,
+        "cuotaMensual": 796.27,
+        "cuotaFinal": 796.02
+      }
+    }
+  ]
+}
