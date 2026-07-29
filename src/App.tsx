@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { sincronizarSiNecesario } from './data/sincronizar';
 import Header from './components/Header';
-import BuscarLotePage from './features/cotizador/BuscarLotePage';
+import CotizadorPage from './features/cotizador/CotizadorPage';
 import CotizadorLayout from './features/cotizador/CotizadorLayout';
-import FichaLotePage from './features/cotizador/FichaLotePage';
-import PlanPage from './features/cotizador/PlanPage';
 import ClientePage from './features/cotizador/ClientePage';
 import PdfPage from './features/cotizador/PdfPage';
 
@@ -25,14 +23,13 @@ export default function App() {
         </div>
       ) : (
         <Routes>
-          <Route path="/" element={<Navigate to="/buscar" replace />} />
-          <Route path="/buscar" element={<BuscarLotePage />} />
+          <Route path="/" element={<CotizadorPage />} />
           <Route path="/lote/:codigo" element={<CotizadorLayout />}>
-            <Route index element={<FichaLotePage />} />
-            <Route path="plan" element={<PlanPage />} />
+            <Route index element={<Navigate to="/" replace />} />
             <Route path="cliente" element={<ClientePage />} />
             <Route path="pdf" element={<PdfPage />} />
           </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}
     </>

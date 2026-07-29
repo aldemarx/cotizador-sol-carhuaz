@@ -133,7 +133,7 @@ export default function PdfPage() {
 
         <button
           type="button"
-          onClick={() => navigate('/buscar')}
+          onClick={() => navigate('/')}
           className="mt-3 w-full rounded-lg border border-slate-300 py-3 font-semibold text-slate-600 hover:bg-slate-50"
         >
           Nueva cotización

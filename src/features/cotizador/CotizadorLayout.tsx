@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { obtenerLote, obtenerParametros } from '../../data/repositorio';
 import type { ParametrosSeed } from '../../data/tipos';
 import { CotizacionProvider, useCotizacionEnCurso } from './CotizacionContext';
@@ -15,7 +15,7 @@ function CargadorDeLote() {
     obtenerLote(codigo).then((encontrado) => {
       if (!vigente) return;
       if (!encontrado) {
-        navigate('/buscar', { replace: true });
+        navigate('/', { replace: true });
         return;
       }
       setLote(encontrado);
@@ -32,6 +32,7 @@ function CargadorDeLote() {
 
 export default function CotizadorLayout() {
   const [parametros, setParametros] = useState<ParametrosSeed | null>(null);
+  const location = useLocation();
 
   useEffect(() => {
     obtenerParametros().then(setParametros);
@@ -39,8 +40,10 @@ export default function CotizadorLayout() {
 
   if (!parametros) return null;
 
+  const inicial = location.state as { nCuotas?: number; descuentoEspecial?: number } | undefined;
+
   return (
-    <CotizacionProvider parametros={parametros}>
+    <CotizacionProvider parametros={parametros} inicial={inicial}>
       <CargadorDeLote />
     </CotizacionProvider>
   );

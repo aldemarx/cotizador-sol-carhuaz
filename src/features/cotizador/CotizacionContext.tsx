@@ -26,14 +26,16 @@ const CotizacionContext = createContext<CotizacionEnCurso | null>(null);
 
 export function CotizacionProvider({
   parametros,
+  inicial,
   children,
 }: {
   parametros: ParametrosSeed;
+  inicial?: { nCuotas?: number; descuentoEspecial?: number };
   children: ReactNode;
 }) {
   const [lote, setLote] = useState<Lote | null>(null);
-  const [nCuotas, setNCuotas] = useState<number>(Number(parametros.cuotas_referencia));
-  const [descuentoEspecial, setDescuentoEspecial] = useState<number>(0);
+  const [nCuotas, setNCuotas] = useState<number>(inicial?.nCuotas ?? Number(parametros.cuotas_referencia));
+  const [descuentoEspecial, setDescuentoEspecial] = useState<number>(inicial?.descuentoEspecial ?? 0);
   const [cliente, setCliente] = useState<DatosCliente | null>(null);
   const [vendedor, setVendedor] = useState<string>(() => obtenerVendedorGuardado());
   const [codigoCotizacion, setCodigoCotizacion] = useState<string | null>(null);

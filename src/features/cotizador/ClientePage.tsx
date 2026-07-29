@@ -39,12 +39,8 @@ export default function ClientePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-4">
-      <button
-        type="button"
-        onClick={() => navigate(`/lote/${lote.codigo_lote}/plan`)}
-        className="mb-3 text-sm text-cian-700"
-      >
-        ← Volver al plan
+      <button type="button" onClick={() => navigate('/')} className="mb-3 text-sm text-cian-700">
+        ← Volver al cotizador
       </button>
 
       <form onSubmit={handleSubmit(onSubmit)} className="rounded-lg bg-white p-4 shadow-sm">
