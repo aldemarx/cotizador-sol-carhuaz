@@ -14,13 +14,14 @@ export default function CotizadorPage() {
   const [resultados, setResultados] = useState<Lote[]>([]);
   const [lote, setLote] = useState<Lote | null>(null);
   const [nCuotas, setNCuotas] = useState(0);
+  const [nCuotasInput, setNCuotasInput] = useState('');
   const [descuentoEspecial, setDescuentoEspecial] = useState(0);
   const [cuotaDeseada, setCuotaDeseada] = useState('');
 
   useEffect(() => {
     obtenerParametros().then((p) => {
       setParametros(p);
-      setNCuotas(Number(p.cuotas_referencia));
+      actualizarCuotas(Number(p.cuotas_referencia));
     });
     listaVigente().then(setVigente);
     listarLotesDisponibles().then((lotes) => setTotalDisponibles(lotes.length));
@@ -58,11 +59,20 @@ export default function CotizadorPage() {
 
   const excedeTope = descuentoEspecial > parametros.descuento_max_vendedor;
 
+  // El input de cuotas mantiene su propio texto (nCuotasInput) para poder
+  // mostrarse vacío mientras el vendedor borra para escribir un numero nuevo,
+  // sin que eso tire nCuotas a 0 y haga desaparecer todo el panel de
+  // financiamiento (calcularCotizacion revienta fuera del rango permitido).
+  function actualizarCuotas(n: number) {
+    setNCuotas(n);
+    setNCuotasInput(String(n));
+  }
+
   function elegirLote(l: Lote) {
     setLote(l);
     setQuery('');
     setResultados([]);
-    setNCuotas(Number(parametros!.cuotas_referencia));
+    actualizarCuotas(Number(parametros!.cuotas_referencia));
     setDescuentoEspecial(0);
     setCuotaDeseada('');
   }
@@ -70,7 +80,18 @@ export default function CotizadorPage() {
   function aplicarCalculoInverso() {
     const monto = Number(cuotaDeseada);
     if (!monto || monto <= 0 || !resultado || !parametros) return;
-    setNCuotas(calcularNumeroCuotas(resultado.saldo, monto, parametros));
+    actualizarCuotas(calcularNumeroCuotas(resultado.saldo, monto, parametros));
+  }
+
+  const cuotasMin = parametros.cuotas_min;
+  const cuotasMax = parametros.cuotas_max;
+
+  function editarCuotasInput(texto: string) {
+    setNCuotasInput(texto);
+    const n = Number(texto);
+    if (texto.trim() !== '' && Number.isFinite(n) && n >= cuotasMin && n <= cuotasMax) {
+      setNCuotas(n);
+    }
   }
 
   return (
@@ -161,18 +182,21 @@ export default function CotizadorPage() {
                         type="number"
                         min={parametros.cuotas_min}
                         max={parametros.cuotas_max}
-                        value={nCuotas}
-                        onChange={(e) => setNCuotas(Number(e.target.value))}
+                        value={nCuotasInput}
+                        onChange={(e) => editarCuotasInput(e.target.value)}
                         className="w-24 rounded-lg border border-slate-300 px-3 py-2 text-center text-base font-semibold focus:border-cian-600 focus:outline-none focus:ring-1 focus:ring-cian-600"
                       />
                       <button
                         type="button"
-                        onClick={() => setNCuotas(Number(parametros.cuotas_referencia))}
+                        onClick={() => actualizarCuotas(Number(parametros.cuotas_referencia))}
                         className="whitespace-nowrap rounded-lg border border-cian-600 px-3 text-xs font-semibold text-cian-700 hover:bg-cian-500/10"
                       >
                         {parametros.cuotas_referencia} estándar
                       </button>
                     </div>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Entre {parametros.cuotas_min} y {parametros.cuotas_max} cuotas.
+                    </p>
 
                     <div className="mt-2 flex gap-2">
                       <input
